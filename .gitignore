@@ -1,0 +1,15 @@
+build/
+build-*/
+scoreboard/build/
+scoreboard/build-*/
+
+.qtcreator/
+scoreboard/.qtcreator/
+
+*.user
+*.autosave
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
