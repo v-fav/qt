@@ -1,0 +1,22 @@
+# build folders
+build/
+build*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+*.ninja_deps
+*.ninja_log
+
+# Qt Creator/IDE
+*.user
+*.user.*
+*.autosave
+.qtc_clangd/
+.qtcreator/
+
+# OS junk
+.DS_Store
+Thumbs.db

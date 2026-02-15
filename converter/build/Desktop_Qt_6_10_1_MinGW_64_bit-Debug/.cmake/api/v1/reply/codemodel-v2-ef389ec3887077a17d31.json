@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-df903447931d7340c59d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "converter",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "converter::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-converter-Debug-053371101c26f4652d7f.json",
+					"name" : "converter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "converter_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-converter_autogen-Debug-82d2b6b19ee3a06e3f35.json",
+					"name" : "converter_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "converter_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-converter_autogen_timestamp_deps-Debug-e914d0ef62973c4bce2f.json",
+					"name" : "converter_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/qtt/converter/build/Desktop_Qt_6_10_1_MinGW_64_bit-Debug",
+		"source" : "C:/qtt/converter"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
