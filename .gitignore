@@ -1,0 +1,7 @@
+build/
+*/build/
+*.exe
+*.obj
+CMakeFiles/
+CMakeCache.txt
+.qtc_clangd/
