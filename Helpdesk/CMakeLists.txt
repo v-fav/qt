@@ -12,6 +12,8 @@ qt_add_executable(Helpdesk
     mainwindow.h
     mainwindow.ui
     ticketdialog.h ticketdialog.cpp ticketdialog.ui
+    tickettablemodel.h tickettablemodel.cpp
+    ticket.h
 
 
 )

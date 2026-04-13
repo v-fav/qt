@@ -1,5 +1,6 @@
 #ifndef TICKETDIALOG_H
 #define TICKETDIALOG_H
+#include "ticket.h"
 
 #include <QDialog>
 
@@ -14,6 +15,8 @@ class TicketDialog : public QDialog
 public:
     explicit TicketDialog(QWidget *parent = nullptr);
     ~TicketDialog();
+    void setTicket(const Ticket& t);
+    Ticket getTicket() const;
 
 private:
     Ui::TicketDialog *ui;
