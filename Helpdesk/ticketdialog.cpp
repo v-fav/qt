@@ -82,6 +82,7 @@ void TicketDialog::loadTicket(const Ticket &t)
     ui->priorityComboBox->setCurrentText(t.priority);
     ui->statusComboBox->setCurrentText(t.status);
     ui->createdValueLabel->setText(t.createdAt);
+    ui->descriptionTextEdit->setText(t.description);
 }
 
 Ticket TicketDialog::collectTicket() const
@@ -92,6 +93,7 @@ Ticket TicketDialog::collectTicket() const
     t.priority = ui->priorityComboBox->currentText();
     t.status = ui->statusComboBox->currentText();
     t.createdAt = ui->createdValueLabel->text();
+    t.description = ui->descriptionTextEdit->toPlainText();
     return t;
 }
 

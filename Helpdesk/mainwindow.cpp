@@ -7,20 +7,19 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , repository("tickets.csv")
 {
     ui->setupUi(this);
 
     model = new TicketTableModel(this);
     ui->ticketsTableView->setModel(model);
+    ui->ticketsTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     ui->ticketsTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->ticketsTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    model->addTicket({1, "VPN issue", "High", "Open", "2024-04-24"});
-    model->addTicket({2, "Email bug", "Low", "Closed", "2024-04-23"});
-    model->addTicket({3, "Crash app", "High", "Open", "2024-04-22"});
-    model->addTicket({4, "UI glitch", "Medium", "In Progress", "2024-04-21"});
-    model->addTicket({5, "Login fail", "High", "Open", "2024-04-20"});
+    auto tickets = repository.loadAll();
+    model->setTickets(tickets);
 
     connect(ui->ticketsTableView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
@@ -56,7 +55,12 @@ void MainWindow::on_actionNewTicket_triggered() {
 
     connect(dialog, &TicketDialog::createRequested, this,
             [this](const Ticket& t){
-                model->addTicket(t);
+
+                Ticket newTicket = t;
+                newTicket.id = repository.getNextId(model->getAllTickets());
+
+                model->addTicket(newTicket);
+                repository.saveAll(model->getAllTickets());
             });
 
     dialog->show();
@@ -88,6 +92,7 @@ void MainWindow::on_actionEditTicket_triggered() {
     connect(dialog, &TicketDialog::updateRequested, this,
             [this, row](const Ticket& t){
                 model->updateTicket(row, t);
+                repository.saveAll(model->getAllTickets());
             });
 
     dialog->show();
@@ -106,5 +111,6 @@ void MainWindow::on_actionDeleteTicket_triggered() {
 
     if (result == QMessageBox::Yes) {
         model->removeTicket(row);
+        repository.saveAll(model->getAllTickets());
     }
 }

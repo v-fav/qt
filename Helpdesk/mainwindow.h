@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "tickettablemodel.h"
+#include "CsvTicketRepository.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +30,7 @@ private:
 private:
     Ui::MainWindow *ui;
     TicketTableModel* model;
+    CsvTicketRepository repository;
 };
 
 #endif

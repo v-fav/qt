@@ -9,6 +9,7 @@ struct Ticket {
     QString priority;
     QString status;
     QString createdAt;
+    QString description;
 };
 
 #endif

@@ -21,7 +21,8 @@ QVariant TicketTableModel::data(const QModelIndex& index, int role) const {
     case TitleCol: return t.title;
     case PriorityCol: return t.priority;
     case StatusCol: return t.status;
-    case CreatedCol: return t.createdAt;
+    case CreatedAtCol: return t.createdAt;
+    case DescriptionCol: return t.description;
     default: return {};
     }
 }
@@ -34,7 +35,8 @@ QVariant TicketTableModel::headerData(int section, Qt::Orientation orientation, 
     case TitleCol: return "Title";
     case PriorityCol: return "Priority";
     case StatusCol: return "Status";
-    case CreatedCol: return "Created At";
+    case CreatedAtCol: return "Created At";
+    case DescriptionCol: return "Description";
     default: return {};
     }
 }
@@ -67,4 +69,16 @@ void TicketTableModel::removeTicket(int row) {
 
 Ticket TicketTableModel::getTicket(int row) const {
     return tickets_.at(row);
+}
+
+QVector<Ticket> TicketTableModel::getAllTickets() const
+{
+    return tickets_;
+}
+
+void TicketTableModel::setTickets(const QVector<Ticket>& tickets)
+{
+    beginResetModel();
+    tickets_ = tickets;
+    endResetModel();
 }

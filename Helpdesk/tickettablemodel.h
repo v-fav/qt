@@ -14,7 +14,8 @@ public:
         TitleCol,
         PriorityCol,
         StatusCol,
-        CreatedCol,
+        CreatedAtCol,
+        DescriptionCol,
         ColCount
     };
 
@@ -30,6 +31,9 @@ public:
     void removeTicket(int row);
 
     Ticket getTicket(int row) const;
+
+    QVector<Ticket> getAllTickets() const;
+    void setTickets(const QVector<Ticket>& tickets);
 
 private:
     QVector<Ticket> tickets_;

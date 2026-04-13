@@ -14,6 +14,7 @@ qt_add_executable(Helpdesk
     ticketdialog.h ticketdialog.cpp ticketdialog.ui
     tickettablemodel.h tickettablemodel.cpp
     ticket.h
+    csvticketrepository.h csvticketrepository.cpp
 
 
 )
