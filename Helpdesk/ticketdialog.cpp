@@ -7,6 +7,18 @@ TicketDialog::TicketDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->priorityComboBox->addItems({
+        "Low",
+        "Medium",
+        "High"
+    });
+
+    ui->statusComboBox->addItems({
+        "Open",
+        "In Progress",
+        "Closed"
+    });
+
     connect(ui->titleLineEdit, &QLineEdit::textChanged,
             this, &TicketDialog::onFormChanged);
 

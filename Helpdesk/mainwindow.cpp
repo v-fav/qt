@@ -2,7 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QItemSelectionModel>
 #include <QMessageBox>
+#include <QHeaderView>
 #include "ticketdialog.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,8 +13,26 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->statusFilterComboBox->addItems({
+        "All",
+        "Open",
+        "In Progress",
+        "Closed"
+    });
+
+    ui->priorityFilterComboBox->addItems({
+        "All",
+        "Low",
+        "Medium",
+        "High"
+    });
+
     model = new TicketTableModel(this);
-    ui->ticketsTableView->setModel(model);
+    proxyModel = new TicketFilterProxyModel(this);
+    proxyModel->setSourceModel(model);
+
+    ui->ticketsTableView->setModel(proxyModel);
+    ui->ticketsTableView->setSortingEnabled(true);
     ui->ticketsTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     ui->ticketsTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -27,6 +47,63 @@ MainWindow::MainWindow(QWidget *parent)
             &MainWindow::updateActions);
 
     updateActions();
+
+    connect(ui->actionExit, &QAction::triggered,
+            this, &QWidget::close);
+
+    connect(ui->actionAbout, &QAction::triggered, this, [this]() {
+        QMessageBox::about(this, "About Helpdesk",
+                           "Helpdesk Application\n\n"
+                           "A simple ticket management system.\n"
+                           "Supports creating, editing, filtering,\n"
+                           "searching and sorting tickets.\n\n"
+                           "Made with Qt.");
+    });
+
+    connect(proxyModel, &QAbstractItemModel::modelReset,
+            this, &MainWindow::updateEmptyState);
+
+    connect(proxyModel, &QAbstractItemModel::rowsInserted,
+            this, &MainWindow::updateEmptyState);
+
+    connect(proxyModel, &QAbstractItemModel::rowsRemoved,
+            this, &MainWindow::updateEmptyState);
+
+    connect(ui->statusFilterComboBox, &QComboBox::currentTextChanged,
+            this, &MainWindow::updateEmptyState);
+
+    connect(ui->priorityFilterComboBox, &QComboBox::currentTextChanged,
+            this, &MainWindow::updateEmptyState);
+
+    connect(ui->searchLineEdit, &QLineEdit::textChanged,
+            this, &MainWindow::updateEmptyState);
+
+    connect(ui->statusFilterComboBox, &QComboBox::currentTextChanged,
+            proxyModel, &TicketFilterProxyModel::setStatusFilter);
+
+    connect(ui->priorityFilterComboBox, &QComboBox::currentTextChanged,
+            proxyModel, &TicketFilterProxyModel::setPriorityFilter);
+
+    connect(ui->searchLineEdit, &QLineEdit::textChanged,
+            proxyModel, &TicketFilterProxyModel::setSearchText);
+
+    connect(ui->ticketsTableView, &QTableView::doubleClicked,
+            this, [this](const QModelIndex& proxyIndex){
+
+                QModelIndex sourceIndex = proxyModel->mapToSource(proxyIndex);
+                int row = sourceIndex.row();
+
+                if (row < 0) return;
+
+                auto* dialog = new TicketDialog(this);
+                dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+                dialog->loadTicket(model->getTicket(row));
+                dialog->setMode(TicketDialog::Mode::View);
+
+                dialog->show();
+            });
+    updateEmptyState();
 }
 
 MainWindow::~MainWindow() {
@@ -34,9 +111,11 @@ MainWindow::~MainWindow() {
 }
 
 int MainWindow::currentRow() const {
-    auto rows = ui->ticketsTableView->selectionModel()->selectedRows();
-    if (rows.isEmpty()) return -1;
-    return rows.first().row();
+    QModelIndex proxyIndex = ui->ticketsTableView->currentIndex();
+    if (!proxyIndex.isValid()) return -1;
+
+    QModelIndex sourceIndex = proxyModel->mapToSource(proxyIndex);
+    return sourceIndex.row();
 }
 
 void MainWindow::updateActions() {
@@ -53,10 +132,22 @@ void MainWindow::on_actionNewTicket_triggered() {
 
     dialog->setMode(TicketDialog::Mode::Create);
 
+    int nextId = repository.getNextId(model->getAllTickets());
+    Ticket temp;
+    temp.id = nextId;
+
+    temp.status = "Open";
+    temp.priority = "Low";
+
+    temp.createdAt = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
+
+    dialog->loadTicket(temp);
+
     connect(dialog, &TicketDialog::createRequested, this,
             [this](const Ticket& t){
 
                 Ticket newTicket = t;
+                newTicket.createdAt = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
                 newTicket.id = repository.getNextId(model->getAllTickets());
 
                 model->addTicket(newTicket);
@@ -113,4 +204,19 @@ void MainWindow::on_actionDeleteTicket_triggered() {
         model->removeTicket(row);
         repository.saveAll(model->getAllTickets());
     }
+}
+
+void MainWindow::on_clearFiltersButton_clicked()
+{
+    ui->statusFilterComboBox->setCurrentText("All");
+    ui->priorityFilterComboBox->setCurrentText("All");
+    ui->searchLineEdit->clear();
+}
+
+void MainWindow::updateEmptyState()
+{
+    bool empty = proxyModel->rowCount() == 0;
+
+    ui->emptyLabel->setVisible(empty);
+    ui->ticketsTableView->setVisible(!empty);
 }

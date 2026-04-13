@@ -54,6 +54,22 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="emptyLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>No tickets found</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableView" name="ticketsTableView"/>
     </item>
    </layout>
@@ -114,7 +130,6 @@
    <addaction name="actionEditTicket"/>
    <addaction name="actionDeleteTicket"/>
    <addaction name="separator"/>
-   <addaction name="actionRefreshTickets"/>
   </widget>
   <action name="actionNewTicket">
    <property name="text">
@@ -159,14 +174,6 @@
   <action name="actionViewTicket">
    <property name="text">
     <string>View</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionRefreshTickets">
-   <property name="text">
-    <string>Refresh</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
