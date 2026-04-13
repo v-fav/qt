@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QItemSelectionModel>
+#include <QMessageBox>
 #include "ticketdialog.h"
-#include <QDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,43 +34,77 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+int MainWindow::currentRow() const {
+    auto rows = ui->ticketsTableView->selectionModel()->selectedRows();
+    if (rows.isEmpty()) return -1;
+    return rows.first().row();
+}
+
 void MainWindow::updateActions() {
-    bool hasSelection = ui->ticketsTableView->currentIndex().isValid();
+    bool hasSelection = ui->ticketsTableView->selectionModel()->hasSelection();
 
     ui->actionViewTicket->setEnabled(hasSelection);
     ui->actionEditTicket->setEnabled(hasSelection);
     ui->actionDeleteTicket->setEnabled(hasSelection);
 }
 
-void MainWindow::on_actionDeleteTicket_triggered() {
-    QModelIndex index = ui->ticketsTableView->currentIndex();
-    if (!index.isValid()) return;
+void MainWindow::on_actionNewTicket_triggered() {
+    auto* dialog = new TicketDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    model->removeTicket(index.row());
+    dialog->setMode(TicketDialog::Mode::Create);
+
+    connect(dialog, &TicketDialog::createRequested, this,
+            [this](const Ticket& t){
+                model->addTicket(t);
+            });
+
+    dialog->show();
 }
 
-void MainWindow::on_actionNewTicket_triggered() {
-    Ticket t;
-    t.id = model->rowCount() + 1;
-    t.title = "New Ticket";
-    t.priority = "Low";
-    t.status = "Open";
-    t.createdAt = "2024-04-25";
+void MainWindow::on_actionViewTicket_triggered() {
+    int row = currentRow();
+    if (row < 0) return;
 
-    model->addTicket(t);
+    auto* dialog = new TicketDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    dialog->loadTicket(model->getTicket(row));
+    dialog->setMode(TicketDialog::Mode::View);
+
+    dialog->show();
 }
 
 void MainWindow::on_actionEditTicket_triggered() {
-    QModelIndex index = ui->ticketsTableView->currentIndex();
-    if (!index.isValid()) return;
+    int row = currentRow();
+    if (row < 0) return;
 
-    int row = index.row();
-    Ticket t = model->getTicket(row);
+    auto* dialog = new TicketDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    TicketDialog dialog(this);
-    dialog.setTicket(t);
+    dialog->loadTicket(model->getTicket(row));
+    dialog->setMode(TicketDialog::Mode::Edit);
 
-    if (dialog.exec() == QDialog::Accepted) {
-        model->updateTicket(row, dialog.getTicket());
+    connect(dialog, &TicketDialog::updateRequested, this,
+            [this, row](const Ticket& t){
+                model->updateTicket(row, t);
+            });
+
+    dialog->show();
+}
+
+void MainWindow::on_actionDeleteTicket_triggered() {
+    int row = currentRow();
+    if (row < 0) return;
+
+    auto result = QMessageBox::question(
+        this,
+        "Delete Ticket",
+        "Are you sure you want to delete this ticket?",
+        QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (result == QMessageBox::Yes) {
+        model->removeTicket(row);
     }
 }

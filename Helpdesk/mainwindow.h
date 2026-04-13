@@ -17,9 +17,14 @@ public:
 
 private slots:
     void updateActions();
+
     void on_actionDeleteTicket_triggered();
     void on_actionNewTicket_triggered();
     void on_actionEditTicket_triggered();
+    void on_actionViewTicket_triggered();
+
+private:
+    int currentRow() const;
 
 private:
     Ui::MainWindow *ui;
