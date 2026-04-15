@@ -8,22 +8,20 @@
 
 #include <QAbstractItemView>
 #include <QDir>
-#include <QFileInfo>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QStatusBar>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_dbManager(new DatabaseManager),
-    m_model(nullptr),
-    m_proxy(nullptr)
+    m_dbManager(new DatabaseManager)
 {
     ui->setupUi(this);
 
-    initTable();
+    ui->labelNoResults->setVisible(false);
 
     if (!initDatabase()) {
         return;
@@ -31,11 +29,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     initModel();
     initConnections();
+    reloadTable();
 
-    refreshCategoryFilter();
-    applyFilters();
-
-    statusBar()->showMessage("Database loaded", 2000);
+    ui->tableEntries->horizontalHeader()->setStretchLastSection(true);
+    ui->tableEntries->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableEntries->verticalHeader()->setVisible(false);
+    ui->tableEntries->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableEntries->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableEntries->setEditTriggers(
+        QAbstractItemView::DoubleClicked |
+        QAbstractItemView::EditKeyPressed |
+        QAbstractItemView::SelectedClicked
+        );
+    ui->tableEntries->setAlternatingRowColors(true);
 }
 
 MainWindow::~MainWindow()
@@ -46,10 +52,10 @@ MainWindow::~MainWindow()
 
 bool MainWindow::initDatabase()
 {
-    const QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(appDataDir);
+    const QString appDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(appDir);
 
-    const QString dbPath = appDataDir + "/passwordmanager.db";
+    const QString dbPath = appDir + "/passwordmanager.db";
 
     if (!m_dbManager->open(dbPath)) {
         showError("Database error", m_dbManager->lastError());
@@ -71,30 +77,7 @@ void MainWindow::initModel()
     m_proxy = new PasswordFilterProxyModel(this);
     m_proxy->setSourceModel(m_model);
 
-    QString error;
-    if (!m_model->load(&error)) {
-        showError("Load error", error);
-    }
-
     ui->tableEntries->setModel(m_proxy);
-    ui->tableEntries->setSortingEnabled(true);
-
-    ui->tableEntries->horizontalHeader()->setStretchLastSection(true);
-    ui->tableEntries->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tableEntries->verticalHeader()->setVisible(false);
-
-    ui->tableEntries->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableEntries->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableEntries->setEditTriggers(
-        QAbstractItemView::DoubleClicked |
-        QAbstractItemView::EditKeyPressed |
-        QAbstractItemView::SelectedClicked
-        );
-}
-
-void MainWindow::initTable()
-{
-    ui->tableEntries->setAlternatingRowColors(true);
 }
 
 void MainWindow::initConnections()
@@ -110,6 +93,19 @@ void MainWindow::initConnections()
     connect(ui->btnClearSearch, &QPushButton::clicked, this, &MainWindow::clearFilters);
 }
 
+void MainWindow::reloadTable()
+{
+    QString error;
+    if (!m_model->load(&error)) {
+        showError("Load error", error);
+        return;
+    }
+
+    refreshCategoryFilter();
+    applyFilters();
+    updateEmptyState();
+}
+
 void MainWindow::refreshCategoryFilter()
 {
     const QString current = ui->comboCategoryFilter->currentText();
@@ -118,32 +114,23 @@ void MainWindow::refreshCategoryFilter()
     ui->comboCategoryFilter->clear();
     ui->comboCategoryFilter->addItem("All");
 
-    if (m_model) {
-        const QStringList cats = m_model->categories();
-        for (const QString &cat : cats) {
-            if (!cat.trimmed().isEmpty()) {
-                ui->comboCategoryFilter->addItem(cat.trimmed());
-            }
+    const QStringList cats = m_model->categories();
+    for (const QString &cat : cats) {
+        if (!cat.trimmed().isEmpty()) {
+            ui->comboCategoryFilter->addItem(cat.trimmed());
         }
     }
 
-    int index = ui->comboCategoryFilter->findText(current);
-    if (index < 0) {
-        index = 0;
-    }
-
-    ui->comboCategoryFilter->setCurrentIndex(index);
+    const int idx = ui->comboCategoryFilter->findText(current);
+    ui->comboCategoryFilter->setCurrentIndex(idx >= 0 ? idx : 0);
     ui->comboCategoryFilter->blockSignals(false);
 }
 
 void MainWindow::applyFilters()
 {
-    if (!m_proxy) {
-        return;
-    }
-
     m_proxy->setSearchText(ui->editSearch->text());
     m_proxy->setCategoryFilter(ui->comboCategoryFilter->currentText());
+    updateEmptyState();
 }
 
 void MainWindow::clearFilters()
@@ -153,70 +140,47 @@ void MainWindow::clearFilters()
     applyFilters();
 }
 
-void MainWindow::selectLastRowAndEdit()
+void MainWindow::updateEmptyState()
 {
-    if (!m_model || !m_proxy) {
-        return;
-    }
-
-    const int sourceRow = m_model->rowCount() - 1;
-    if (sourceRow < 0) {
-        return;
-    }
-
-    QModelIndex sourceIndex = m_model->index(sourceRow, PasswordTableModel::TitleColumn);
-    QModelIndex proxyIndex = m_proxy->mapFromSource(sourceIndex);
-
-    if (proxyIndex.isValid()) {
-        ui->tableEntries->setCurrentIndex(proxyIndex);
-        ui->tableEntries->edit(proxyIndex);
-    }
+    const bool empty = (m_proxy->rowCount() == 0);
+    ui->labelNoResults->setVisible(empty);
 }
 
 void MainWindow::onNewClicked()
 {
-    if (!m_model) {
+    QString error;
+
+    PasswordRecord record;
+    record.title = "New entry";
+    record.updatedAt = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+
+    if (!m_repository->insert(record, &error)) {
+        showError("Insert error", error);
         return;
     }
 
-    const QString defaultCategory =
-        ui->comboCategoryFilter->currentText() == "All"
-            ? QString()
-            : ui->comboCategoryFilter->currentText();
-
-    m_model->addEmptyRow(defaultCategory);
-    refreshCategoryFilter();
-    applyFilters();
-    selectLastRowAndEdit();
-
-    statusBar()->showMessage("New row added", 1500);
+    reloadTable();
 }
 
 void MainWindow::onEditClicked()
 {
-    const QModelIndex current = ui->tableEntries->currentIndex();
-    if (!current.isValid()) {
+    const QModelIndex proxyIndex = ui->tableEntries->currentIndex();
+    if (!proxyIndex.isValid())
         return;
+
+    QModelIndex editIndex = proxyIndex;
+    if (proxyIndex.column() == PasswordTableModel::IdColumn) {
+        editIndex = proxyIndex.sibling(proxyIndex.row(), PasswordTableModel::TitleColumn);
     }
 
-    QModelIndex editableIndex = current;
-    if (current.column() == PasswordTableModel::IdColumn) {
-        editableIndex = current.sibling(current.row(), PasswordTableModel::TitleColumn);
-    }
-
-    ui->tableEntries->edit(editableIndex);
+    ui->tableEntries->edit(editIndex);
 }
 
 void MainWindow::onDeleteClicked()
 {
-    if (!m_model || !m_proxy) {
+    const QModelIndex proxyIndex = ui->tableEntries->currentIndex();
+    if (!proxyIndex.isValid())
         return;
-    }
-
-    const QModelIndex current = ui->tableEntries->currentIndex();
-    if (!current.isValid()) {
-        return;
-    }
 
     const auto answer = QMessageBox::question(
         this,
@@ -224,44 +188,23 @@ void MainWindow::onDeleteClicked()
         "Delete selected record?"
         );
 
-    if (answer != QMessageBox::Yes) {
+    if (answer != QMessageBox::Yes)
         return;
-    }
 
-    const QModelIndex sourceIndex = m_proxy->mapToSource(current);
+    const QModelIndex sourceIndex = m_proxy->mapToSource(proxyIndex);
+
     QString error;
-
     if (!m_model->deleteRow(sourceIndex.row(), &error)) {
         showError("Delete error", error);
         return;
     }
 
-    refreshCategoryFilter();
-    applyFilters();
-    statusBar()->showMessage("Row deleted", 1500);
+    reloadTable();
 }
 
 void MainWindow::onSaveClicked()
 {
-    if (!m_model) {
-        return;
-    }
-
-    QString error;
-    if (!m_model->saveAll(&error)) {
-        showError("Save error", error);
-        return;
-    }
-
-    if (!m_model->load(&error)) {
-        showError("Reload error", error);
-        return;
-    }
-
-    refreshCategoryFilter();
-    applyFilters();
-
-    statusBar()->showMessage("Changes saved", 2000);
+    reloadTable();
 }
 
 void MainWindow::onExitClicked()

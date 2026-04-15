@@ -12,16 +12,12 @@ qt_standard_project_setup()
 qt_add_executable(PasswordManager
     main.cpp
     mainwindow.h mainwindow.cpp
-
+    mainwindow.ui
     databasemanager.h databasemanager.cpp
     passwordrepository.h passwordrepository.cpp
     passwordtablemodel.h passwordtablemodel.cpp
     passwordfilterproxymodel.h passwordfilterproxymodel.cpp
     passwordrecord.h
-    passwordrecord.h
-    passwordrepository.h passwordrepository.cpp
-    passwordtablemodel.h passwordtablemodel.cpp
-    passwordfilterproxymodel.h passwordfilterproxymodel.cpp
 )
 
 target_link_libraries(PasswordManager PRIVATE Qt6::Widgets Qt6::Sql)

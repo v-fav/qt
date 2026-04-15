@@ -22,30 +22,21 @@ void PasswordFilterProxyModel::setCategoryFilter(const QString &category)
 
 bool PasswordFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    auto *model = sourceModel();
-    if (!model) {
+    const auto *source = sourceModel();
+    if (!source)
         return true;
-    }
 
-    const QModelIndex categoryIndex = model->index(source_row, PasswordTableModel::CategoryColumn, source_parent);
-    const QString categoryValue = model->data(categoryIndex, Qt::DisplayRole).toString();
+    const QModelIndex titleIndex = source->index(source_row, PasswordTableModel::TitleColumn, source_parent);
+    const QModelIndex categoryIndex = source->index(source_row, PasswordTableModel::CategoryColumn, source_parent);
 
-    if (!m_category.isEmpty() && m_category != "All" && categoryValue != m_category) {
-        return false;
-    }
+    const QString title = source->data(titleIndex).toString();
+    const QString category = source->data(categoryIndex).toString();
 
-    if (m_searchText.isEmpty()) {
-        return true;
-    }
+    const bool textOk = m_searchText.isEmpty()
+                        || title.contains(m_searchText, Qt::CaseInsensitive);
 
-    QString combined;
-    combined += model->data(model->index(source_row, PasswordTableModel::TitleColumn, source_parent)).toString();
-    combined += ' ';
-    combined += model->data(model->index(source_row, PasswordTableModel::UsernameColumn, source_parent)).toString();
-    combined += ' ';
-    combined += model->data(model->index(source_row, PasswordTableModel::WebsiteColumn, source_parent)).toString();
-    combined += ' ';
-    combined += categoryValue;
+    const bool categoryOk = (m_category == "All" || m_category.isEmpty())
+                            || category == m_category;
 
-    return combined.contains(m_searchText, Qt::CaseInsensitive);
+    return textOk && categoryOk;
 }

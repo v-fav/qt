@@ -29,6 +29,7 @@ private slots:
 
     void applyFilters();
     void clearFilters();
+    void updateEmptyState();
 
 private:
     Ui::MainWindow *ui = nullptr;
@@ -40,9 +41,8 @@ private:
 
     bool initDatabase();
     void initModel();
-    void initTable();
     void initConnections();
     void refreshCategoryFilter();
-    void selectLastRowAndEdit();
+    void reloadTable();
     void showError(const QString &title, const QString &message);
 };
