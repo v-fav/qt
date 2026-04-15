@@ -1,23 +1,48 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+class DatabaseManager;
+class PasswordRepository;
+class PasswordTableModel;
+class PasswordFilterProxyModel;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void onNewClicked();
+    void onEditClicked();
+    void onDeleteClicked();
+    void onSaveClicked();
+    void onExitClicked();
+
+    void applyFilters();
+    void clearFilters();
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui = nullptr;
+
+    DatabaseManager *m_dbManager = nullptr;
+    std::unique_ptr<PasswordRepository> m_repository;
+    PasswordTableModel *m_model = nullptr;
+    PasswordFilterProxyModel *m_proxy = nullptr;
+
+    bool initDatabase();
+    void initModel();
+    void initTable();
+    void initConnections();
+    void refreshCategoryFilter();
+    void selectLastRowAndEdit();
+    void showError(const QString &title, const QString &message);
 };
-#endif // MAINWINDOW_H

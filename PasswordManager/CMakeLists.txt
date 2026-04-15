@@ -1,35 +1,29 @@
-cmake_minimum_required(VERSION 3.19)
-project(PasswordManager LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+project(PasswordManager VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
 
 qt_standard_project_setup()
 
 qt_add_executable(PasswordManager
-    WIN32 MACOSX_BUNDLE
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
+    mainwindow.h mainwindow.cpp
+
+    databasemanager.h databasemanager.cpp
+    passwordrepository.h passwordrepository.cpp
+    passwordtablemodel.h passwordtablemodel.cpp
+    passwordfilterproxymodel.h passwordfilterproxymodel.cpp
+    passwordrecord.h
+    passwordrecord.h
+    passwordrepository.h passwordrepository.cpp
+    passwordtablemodel.h passwordtablemodel.cpp
+    passwordfilterproxymodel.h passwordfilterproxymodel.cpp
 )
 
-target_link_libraries(PasswordManager
-    PRIVATE
-        Qt::Core
-        Qt::Widgets
-)
+target_link_libraries(PasswordManager PRIVATE Qt6::Widgets Qt6::Sql)
 
-include(GNUInstallDirs)
-
-install(TARGETS PasswordManager
-    BUNDLE  DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-qt_generate_deploy_app_script(
-    TARGET PasswordManager
-    OUTPUT_SCRIPT deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
+target_include_directories(PasswordManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
