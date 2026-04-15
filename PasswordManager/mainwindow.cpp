@@ -13,6 +13,9 @@
 #include <QStandardPaths>
 #include <QStatusBar>
 #include <QDateTime>
+#include "passwordleakchecker.h"
+#include <QAction>
+#include <QProgressDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -29,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initModel();
     initConnections();
+    initSecurityChecker();
     reloadTable();
 
     ui->tableEntries->horizontalHeader()->setStretchLastSection(true);
@@ -215,4 +219,89 @@ void MainWindow::onExitClicked()
 void MainWindow::showError(const QString &title, const QString &message)
 {
     QMessageBox::critical(this, title, message);
+}
+
+void MainWindow::initSecurityChecker()
+{
+    m_passwordLeakChecker = new PasswordLeakChecker(this);
+
+    m_checkPasswordAction = new QAction("Check Password", this);
+    ui->menuTools->addAction(m_checkPasswordAction);
+    ui->mainToolBar->addAction(m_checkPasswordAction);
+
+    connect(m_checkPasswordAction, &QAction::triggered, this, &MainWindow::onCheckPasswordClicked);
+
+    m_checkPasswordDialog = new QProgressDialog("Checking password...", QString(), 0, 0, this);
+    m_checkPasswordDialog->setWindowTitle("Password check");
+    m_checkPasswordDialog->setCancelButton(nullptr);
+    m_checkPasswordDialog->setWindowModality(Qt::NonModal);
+    m_checkPasswordDialog->setMinimumDuration(300);
+    m_checkPasswordDialog->hide();
+
+    connect(m_passwordLeakChecker, &PasswordLeakChecker::checkStarted, this, [this]() {
+        m_checkPasswordAction->setEnabled(false);
+        m_checkPasswordDialog->show();
+        statusBar()->showMessage("Checking password...");
+    });
+
+    connect(m_passwordLeakChecker, &PasswordLeakChecker::checkCompleted, this,
+            [this](bool found, int count) {
+                m_checkPasswordDialog->hide();
+                m_checkPasswordAction->setEnabled(true);
+
+                if (found) {
+                    QMessageBox::warning(
+                        this,
+                        "Password check",
+                        QString("Password was found in leaked databases %1 time(s).").arg(count)
+                        );
+                } else {
+                    QMessageBox::information(
+                        this,
+                        "Password check",
+                        "Password was not found in leaked databases."
+                        );
+                }
+
+                statusBar()->showMessage("Password check finished", 3000);
+            });
+
+    connect(m_passwordLeakChecker, &PasswordLeakChecker::checkFailed, this,
+            [this](const QString &message) {
+                m_checkPasswordDialog->hide();
+                m_checkPasswordAction->setEnabled(true);
+                showError("Password check error", message);
+                statusBar()->showMessage("Password check failed", 3000);
+            });
+}
+
+void MainWindow::onCheckPasswordClicked()
+{
+    if (!m_passwordLeakChecker) {
+        initSecurityChecker();
+    }
+
+    if (!m_model || !m_proxy) {
+        return;
+    }
+
+    const QModelIndex proxyIndex = ui->tableEntries->currentIndex();
+    if (!proxyIndex.isValid()) {
+        showError("Password check", "Select a record first.");
+        return;
+    }
+
+    const QModelIndex sourceIndex = m_proxy->mapToSource(proxyIndex);
+    if (!sourceIndex.isValid()) {
+        showError("Password check", "Unable to map selected row.");
+        return;
+    }
+
+    const PasswordRecord &record = m_model->itemAt(sourceIndex.row());
+    if (record.password.trimmed().isEmpty()) {
+        showError("Password check", "Selected record has an empty password.");
+        return;
+    }
+
+    m_passwordLeakChecker->checkPassword(record.password);
 }
