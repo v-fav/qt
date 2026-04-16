@@ -11,6 +11,7 @@ struct PasswordRecord
     QString website;
     QString category;
     QString updatedAt;
+    QString checkStatus;
     bool isNew = false;
     bool dirty = false;
 };

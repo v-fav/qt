@@ -17,6 +17,10 @@
 #include <QAction>
 #include <QProgressDialog>
 
+#include <QtConcurrent>
+#include <QFutureWatcher>
+#include "passwordbatch.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -82,6 +86,7 @@ void MainWindow::initModel()
     m_proxy->setSourceModel(m_model);
 
     ui->tableEntries->setModel(m_proxy);
+    ui->tableEntries->setColumnHidden(PasswordTableModel::CheckColumn, false);
 }
 
 void MainWindow::initConnections()
@@ -231,6 +236,12 @@ void MainWindow::initSecurityChecker()
 
     connect(m_checkPasswordAction, &QAction::triggered, this, &MainWindow::onCheckPasswordClicked);
 
+    m_checkAllAction = new QAction("Check All Passwords", this);
+    ui->menuTools->addAction(m_checkAllAction);
+    ui->mainToolBar->addAction(m_checkAllAction);
+
+    connect(m_checkAllAction, &QAction::triggered, this, &MainWindow::onCheckAllPasswords);
+
     m_checkPasswordDialog = new QProgressDialog("Checking password...", QString(), 0, 0, this);
     m_checkPasswordDialog->setWindowTitle("Password check");
     m_checkPasswordDialog->setCancelButton(nullptr);
@@ -273,6 +284,12 @@ void MainWindow::initSecurityChecker()
                 showError("Password check error", message);
                 statusBar()->showMessage("Password check failed", 3000);
             });
+    m_batchProgress = new QProgressDialog("Checking all passwords...", "Cancel", 0, 100, this);
+    m_batchProgress->setWindowTitle("Batch check");
+    m_batchProgress->setWindowModality(Qt::NonModal);
+    m_batchProgress->setMinimumDuration(0);
+    m_batchProgress->setAutoClose(false);
+    m_batchProgress->hide();
 }
 
 void MainWindow::onCheckPasswordClicked()
@@ -304,4 +321,93 @@ void MainWindow::onCheckPasswordClicked()
     }
 
     m_passwordLeakChecker->checkPassword(record.password);
+}
+
+void MainWindow::onCheckAllPasswords()
+{
+
+    if (m_batchWatcher) {
+        return;
+    }
+
+    m_checkAllAction->setEnabled(false);
+    statusBar()->showMessage("Batch check started...");
+
+    QVector<BatchItem> items;
+
+    for (int row = 0; row < m_model->rowCount(); ++row)
+    {
+        const auto &rec = m_model->itemAt(row);
+
+        if (!rec.password.trimmed().isEmpty())
+            items.append({row, rec.password});
+    }
+
+    if (items.isEmpty()) {
+        showError("Batch", "No passwords");
+        return;
+    }
+
+    m_batchProgress->setMaximum(items.size());
+    m_batchProgress->setValue(0);
+    m_batchProgress->show();
+
+    m_batchWatcher = new QFutureWatcher<QVector<BatchResult>>(this);
+
+    QFuture<QVector<BatchResult>> future =
+        QtConcurrent::run([this, items]() {
+            return checkAllPasswords(items, [this](int current, int total) {
+
+                QMetaObject::invokeMethod(this, [this, current, total]() {
+                    if (m_batchProgress) {
+                        m_batchProgress->setMaximum(total);
+                        m_batchProgress->setValue(current);
+                    }
+
+                    statusBar()->showMessage(
+                        QString("Checking %1 / %2").arg(current).arg(total)
+                        );
+                });
+
+            });
+        });
+
+    connect(m_batchWatcher, &QFutureWatcher<QVector<BatchResult>>::finished,
+            this, &MainWindow::onBatchFinished);
+
+    m_batchWatcher->setFuture(future);
+}
+
+void MainWindow::onBatchFinished()
+{
+    auto results = m_batchWatcher->result();
+
+    for (const auto &r : results)
+    {
+        QModelIndex idx = m_model->index(r.row, PasswordTableModel::CheckColumn);
+
+        QString status;
+
+        if (!r.result.error.isEmpty()) {
+            status = "Error";
+        }
+        else if (r.result.found) {
+            status = QString("Leaked (%1)").arg(r.result.count);
+        }
+        else {
+            status = "Safe";
+        }
+
+        m_model->setData(idx, status, Qt::EditRole);
+    }
+
+    m_batchWatcher->deleteLater();
+    m_batchWatcher = nullptr;
+
+    if (m_batchProgress) {
+        m_batchProgress->hide();
+    }
+
+    m_checkAllAction->setEnabled(true);
+    statusBar()->showMessage("Batch check finished", 3000);
 }

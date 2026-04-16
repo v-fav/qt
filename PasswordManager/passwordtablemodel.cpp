@@ -41,6 +41,7 @@ QVariant PasswordTableModel::data(const QModelIndex &index, int role) const
         case WebsiteColumn: return item.website;
         case CategoryColumn: return item.category;
         case UpdatedAtColumn: return item.updatedAt;
+        case CheckColumn: return item.checkStatus;
         default: return {};
         }
     }
@@ -62,6 +63,7 @@ QVariant PasswordTableModel::headerData(int section, Qt::Orientation orientation
         case WebsiteColumn: return "Website";
         case CategoryColumn: return "Category";
         case UpdatedAtColumn: return "UpdatedAt";
+        case CheckColumn: return "Security";
         default: return {};
         }
     }
@@ -108,6 +110,9 @@ bool PasswordTableModel::setData(const QModelIndex &index, const QVariant &value
         break;
     case UpdatedAtColumn:
         updated.updatedAt = value.toString();
+        break;
+    case CheckColumn:
+        updated.checkStatus = value.toString();
         break;
     default:
         return false;

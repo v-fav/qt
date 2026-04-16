@@ -5,7 +5,7 @@ project(PasswordManager VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Network)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Network Concurrent)
 
 qt_standard_project_setup()
 
@@ -19,8 +19,10 @@ qt_add_executable(PasswordManager
     passwordfilterproxymodel.h passwordfilterproxymodel.cpp
     passwordrecord.h
     passwordleakchecker.h passwordleakchecker.cpp
+    passwordbatch.h passwordbatch.cpp
+    passwordcheckutils.h passwordcheckutils.cpp
 )
 
-target_link_libraries(PasswordManager PRIVATE Qt6::Widgets Qt6::Sql Qt6::Network)
+target_link_libraries(PasswordManager PRIVATE Qt6::Widgets Qt6::Sql Qt6::Network Qt6::Concurrent)
 
 target_include_directories(PasswordManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

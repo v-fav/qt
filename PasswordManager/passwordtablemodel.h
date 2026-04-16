@@ -21,6 +21,7 @@ public:
         WebsiteColumn,
         CategoryColumn,
         UpdatedAtColumn,
+        CheckColumn,
         ColumnCount
     };
 

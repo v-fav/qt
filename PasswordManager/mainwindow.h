@@ -3,6 +3,9 @@
 #include <QMainWindow>
 #include <memory>
 
+#include <QFutureWatcher>
+#include "passwordbatch.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -36,6 +39,9 @@ private slots:
     void clearFilters();
     void updateEmptyState();
 
+    void onCheckAllPasswords();
+    void onBatchFinished();
+
 private:
     Ui::MainWindow *ui = nullptr;
 
@@ -47,6 +53,11 @@ private:
     PasswordLeakChecker *m_passwordLeakChecker = nullptr;
     QAction *m_checkPasswordAction = nullptr;
     QProgressDialog *m_checkPasswordDialog = nullptr;
+
+    QFutureWatcher<QVector<BatchResult>> *m_batchWatcher = nullptr;
+
+    QAction *m_checkAllAction = nullptr;
+    QProgressDialog *m_batchProgress = nullptr;
 
     bool initDatabase();
     void initModel();
