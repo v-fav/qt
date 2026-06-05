@@ -1,0 +1,10 @@
+Name=Ukrainian alphabet
+Difficulty=Easy
+Language=Ukrainian
+
+А
+Б
+В
+Г
+Ґ
+Д

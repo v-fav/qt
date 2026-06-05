@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutDialog</class>
+ <widget class="QDialog" name="AboutDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>736</width>
+    <height>717</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>-2240</y>
+           <width>673</width>
+           <height>3819</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>50</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:22pt; font-weight:700;&quot;&gt;About Morse Code Trainer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="aboutTextLabel">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Morse Code Trainer&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — це навчальний застосунок для вивчення азбуки Морзе шляхом практичного виконання тестових завдань. Програма допомагає користувачеві запам'ятовувати літери та цифри, відстежувати власний прогрес і визначати символи, які потребують додаткового тренування.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Основна мета програми — сформувати навички швидкого розпізнавання та введення коду Морзе за допомогою інтерактивних тестів і системи статистики.&lt;/span&gt;&lt;/p&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Основні можливості&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• проходження навчальних тестів з азбуки Морзе;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• підтримка англійської та української мов;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• перегляд довідника символів Морзе;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• відстеження статистики навчання;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• визначення слабко вивчених символів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• збереження прогресу користувача;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• експорт результатів у текстовий файл;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• декілька способів введення коду Морзе.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Головний екран&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Після запуску програми відкривається головне вікно.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У верхній частині відображається загальний прогрес навчання користувача. Значення прогресу залежить від кількості вивчених символів. Символ вважається вивченим після трьох правильних введень під час тестування.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;На головному екрані доступні такі розділи:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Start Test&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — перехід до вибору тесту;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Morse Alphabet&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — відкриття довідника азбуки Морзе;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Statistics&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — перегляд статистики навчання;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Settings&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — налаштування програми;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;About&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — інформація про програму.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Вибір тесту&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У вікні вибору тесту відображається список доступних тестів.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Після вибору тесту користувач може переглянути:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• назву тесту;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• рівень складності;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• мову тесту;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• кількість завдань.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Для початку проходження необхідно натиснути кнопку &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Start&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Проходження тесту&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Під час тестування користувачеві послідовно пропонуються завдання з обраного тесту.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Для введення коду Морзе доступні такі способи:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• натискання кнопок &amp;quot;.&amp;quot; та &amp;quot;-&amp;quot;;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• введення символів з клавіатури;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• введення за допомогою клавіші пробілу.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Коротке натискання пробілу відповідає символу &amp;quot;.&amp;quot;, а довге натискання — символу &amp;quot;-&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У процесі тестування доступні такі дії:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Next&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — підтвердження відповіді та перехід до наступного завдання;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Skip&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — пропуск поточного завдання (відповідь зараховується як неправильна);&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Clear&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — видалення останнього введеного символу;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Exit&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — завершення тестування.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Якщо поле введення порожнє та користувач натискає &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Next&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;, програма виводить повідомлення про необхідність ввести відповідь.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Поточний прогрес виконання тесту відображається за допомогою смуги прогресу у верхній частині вікна.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Довідник азбуки Морзе&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Розділ &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Morse Alphabet&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; містить таблицю символів та відповідних кодів Морзе.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Для зручності користувача передбачено:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• пошук символів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• фільтрацію за типом символів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• автоматичне відображення символів відповідно до обраної мови.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Статистика&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Розділ статистики дозволяє аналізувати результати навчання.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У статистиці відображаються:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• результати пройдених тестів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• відсоток правильних відповідей;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• середня точність виконання тестів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• кількість завершених тестів;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• список слабких символів.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Слабкими вважаються символи, які були правильно введені менше трьох разів. Після трьох успішних введень символ автоматично зникає зі списку слабких.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Для роботи зі статистикою доступні такі функції:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Reset Progress&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — повне очищення статистики та прогресу;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Export Progress&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; — збереження результатів у текстовий файл.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Налаштування&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У вікні налаштувань користувач може:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• обрати мову інтерфейсу та навчання;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• увімкнути або вимкнути введення з клавіатури;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• увімкнути або вимкнути введення через пробіл;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• скинути весь накопичений прогрес.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Для застосування змін необхідно натиснути кнопку &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Save&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;. До збереження внесені зміни не набувають чинності.&lt;/span&gt;&lt;/p&gt;&lt;hr/&gt;&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Результати тестування&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Після завершення тесту відкривається вікно результатів.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;У ньому відображаються:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• кількість правильних відповідей;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• кількість неправильних відповідей;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• відсоток правильності;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• графічна смуга результату.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Отримані результати автоматично додаються до загальної статистики користувача.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="closeButton">
+          <property name="styleSheet">
+           <string notr="true">font: 14pt &quot;Segoe UI&quot;;</string>
+          </property>
+          <property name="text">
+           <string>Close</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
