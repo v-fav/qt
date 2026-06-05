@@ -1,14 +1,14 @@
-Name=Numbers
+Name=Numbers Part 3
 Difficulty=Easy
 Language=Any
 
-1
-2
 3
-4
-5
-6
-7
 8
-9
 0
+6
+1
+7
+5
+2
+9
+4

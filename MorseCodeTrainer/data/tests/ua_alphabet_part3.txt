@@ -1,0 +1,15 @@
+Name=Ukrainian Alphabet Part 3
+Difficulty=Easy
+Language=Ukrainian
+
+Ф
+С
+Ь
+Щ
+Т
+Ч
+Р
+Х
+У
+Ц
+Ш

@@ -1,0 +1,15 @@
+Name=Ukrainian Alphabet Part 2
+Difficulty=Easy
+Language=Ukrainian
+
+І
+М
+И
+П
+К
+Ї
+Н
+Ю
+Й
+О
+Л
