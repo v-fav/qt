@@ -1,0 +1,14 @@
+Name=English Alphabet Part 2
+Difficulty=Easy
+Language=English
+
+R
+K
+T
+N
+P
+L
+S
+M
+Q
+O

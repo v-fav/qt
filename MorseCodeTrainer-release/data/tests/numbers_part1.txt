@@ -1,0 +1,14 @@
+Name=Numbers Part 1
+Difficulty=Easy
+Language=Any
+
+4
+0
+8
+2
+6
+1
+9
+3
+7
+5

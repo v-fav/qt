@@ -1,0 +1,14 @@
+Name=Numbers Part 3
+Difficulty=Easy
+Language=Any
+
+3
+8
+0
+6
+1
+7
+5
+2
+9
+4

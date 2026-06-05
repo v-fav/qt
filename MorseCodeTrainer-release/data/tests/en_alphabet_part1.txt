@@ -1,0 +1,14 @@
+Name=English Alphabet Part 1
+Difficulty=Easy
+Language=English
+
+A
+F
+C
+I
+D
+H
+B
+J
+G
+E

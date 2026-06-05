@@ -1,0 +1,10 @@
+Name=English Alphabet Part 3
+Difficulty=Easy
+Language=English
+
+Y
+U
+W
+Z
+V
+X
